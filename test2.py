@@ -20,8 +20,11 @@ window_len = 7               # is an intiger to be used as the look back window 
 training_size = 0.8           # porportion of data to be used for training
 merge_date = '2016-01-01'     # the earliest date which we have data for both ETH and BTC or any other provided coin
 
-
-
+market = "btc"
+market_data = pd.read_html("https://coinmarketcap.com/currencies/" + market + 
+                             "/historical-data/?start=20130428&end="+time.strftime("%Y%m%d"), flavor='html5lib')[0]
+print(market_data.head())
+exit(0)
 def get_market_data(market, tag=True):
   """
   market: the full name of the cryptocurrency as spelled on coinmarketcap.com. eg.: 'bitcoin'
