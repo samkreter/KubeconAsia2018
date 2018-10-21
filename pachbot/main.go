@@ -47,18 +47,13 @@ func acrPushHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// acrIdentity, ok := os.LookupEnv("ACR_IDENTITY")
-	// if !ok {
-	// 	log.Println("WARN: ACR_IDENTITY not set.")
-	// }
-
 	r := mux.NewRouter()
 	r.HandleFunc("/acrpush", acrPushHandler).
 		Methods("POST")
 
 	srv := &http.Server{
 		Handler: r,
-		Addr:    "127.0.0.1:8080",
+		Addr:    "0.0.0.0:8080",
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
