@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: pachbot
+  name: pachbot
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: pachbot
+  template:
+    metadata:
+      labels:
+        run: pachbot
+    spec:
+      containers:
+        - image: pskreter/pachbot:0.0.1
+          imagePullPolicy: Always
+
+          name: pachbot
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
