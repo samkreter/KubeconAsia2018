@@ -15,10 +15,17 @@ spec:
       labels:
         run: pachbot
     spec:
+      hostNetwork: true
       containers:
-        - image: pskreter/pachbot:0.0.1
+        - image: pskreter/pachbot:0.0.6
           imagePullPolicy: Always
-
+          env:
+            - name: GITHUB_TOKEN
+              value: none
+            - name: CLONE_URL
+              value: https://github.com/samkreter/KubeconAsia2018.git
+            - name: WORK_DIR
+              value: ./workRepo
           name: pachbot
           ports:
             - containerPort: 8080
