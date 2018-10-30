@@ -1,7 +1,8 @@
-package github
+package deploy
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -10,21 +11,21 @@ import (
 	git "gopkg.in/src-d/go-git.v4"
 )
 
-const (
-	defaultWorkRepo = "./workrepo"
-)
-
-// Client holds the needed info for a git client
-type Client struct {
+// Deployer holds the needed data for a deployer
+type Deployer struct {
 	c        *github.Client
 	workdir  string
 	cloneURL string
 }
 
-// NewClient creates a new git client
-func NewClient(cloneURL, githubPAT, workdir string) (*Client, error) {
+// New creates a new deployer
+func New(cloneURL, githubPAT, workdir string) (*Deployer, error) {
 	if workdir == "" {
-		workdir = defaultWorkRepo
+		return nil, fmt.Errorf("workdir can not be empty")
+	}
+
+	if cloneURL == "" {
+		return nil, fmt.Errorf("cloneURL can not be empty")
 	}
 
 	ctx := context.Background()
@@ -35,31 +36,38 @@ func NewClient(cloneURL, githubPAT, workdir string) (*Client, error) {
 
 	c := github.NewClient(tc)
 
-	return &Client{
+	return &Deployer{
 		c:        c,
 		cloneURL: cloneURL,
 		workdir:  workdir,
 	}, nil
 }
 
+// NewDeployment creates a new deployment in the cluster
+func (d *Deployer) NewDeployment(imageName, tag string) {
+	if err := d.updateRepo(); err != nil {
+		log.Printf("ERROR: failed to update repository with error: %v", err)
+	}
+}
+
 // UpdateRepo clones a repo or pulls latest changes if it doesn't exist
-func (c *Client) UpdateRepo() error {
-	log.Printf("Cloning Repository %s into folder: %s", c.cloneURL, c.workdir)
-	_, err := git.PlainClone(c.workdir, false, &git.CloneOptions{
-		URL:      c.cloneURL,
+func (d *Deployer) updateRepo() error {
+	log.Printf("Cloning Repository %s into folder: %s", d.cloneURL, d.workdir)
+	_, err := git.PlainClone(d.workdir, false, &git.CloneOptions{
+		URL:      d.cloneURL,
 		Progress: os.Stdout,
 	})
 	if err != nil {
 		log.Printf("%v: Attempting to pull latest changes", err)
-		return c.PullLatest()
+		return d.pullLatest()
 	}
 
 	return nil
 }
 
 // PullLatest Pulls the latest changes from a repository
-func (c *Client) PullLatest() error {
-	r, err := git.PlainOpen(c.workdir)
+func (d *Deployer) pullLatest() error {
+	r, err := git.PlainOpen(d.workdir)
 	if err != nil {
 		return err
 	}
