@@ -23,9 +23,13 @@ steps:
       cp -r pipelines $(Build.ArtifactStagingDirectory)/pipelines
     displayName: "Copy Pipeline Files"
 
+  # - script: |
+  #     sed -i 's/#IMAGE_TAG#/imageName/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
+  #   displayName: "Replace Image Tags"
+
   - script: |
-      sed -i 's/#IMAGE_TAG#/imageName/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
-    displayName: "Replace Image Tags"
+      sed -i 's/#BUILD_NUMBER#/$(build.buildId)/g' $(Build.ArtifactStagingDirectory)/deploy/*.yaml
+    displayName: "Replace BuildID"
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifacts: drop"
