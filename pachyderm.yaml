@@ -16,7 +16,7 @@ steps:
   #   displayName: "Install Pachyderm"
 
   - script: |
-      sed -i 's/#$(baseImageName)#/imageName/g' hyper/pipelines/$(baseImageName).yaml
+      sed -i 's/#$(baseImageName)#/imageName/g' hyper/pipelines/*.json
     displayName: "Replace Image Tags"
 
   - task: PublishBuildArtifacts@1
