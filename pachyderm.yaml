@@ -28,8 +28,8 @@ steps:
   #   displayName: "Replace Image Tags"
 
   - script: |
-      sed -i 's/#BUILD_NUMBER#/$(build.buildId)/g' $(Build.ArtifactStagingDirectory)/deploy/*.yaml
-    displayName: "Replace BuildID"
+      sed -i 's/#BUILD_NUMBER#/$(Build.BuildNumber)/g' $(Build.ArtifactStagingDirectory)/deploy/*.yaml
+    displayName: "Replace Build Number"
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifacts: drop"
