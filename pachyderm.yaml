@@ -16,7 +16,15 @@ steps:
   #   displayName: "Install Pachyderm"
 
   - script: |
-      sed -i 's/#$(baseImageName)#/imageName/g' hyper/pipelines/*.json
+      cp -r deploy $(Build.ArtifactStagingDirectory)/deploy
+    displayName: "Copy Deployment Files"
+
+  - script: |
+      cp -r pipelines $(Build.ArtifactStagingDirectory)/pipelines
+    displayName: "Copy Pipeline Files"
+
+  - script: |
+      sed -i 's/#$(baseImageName)#/imageName/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
     displayName: "Replace Image Tags"
 
   - task: PublishBuildArtifacts@1
