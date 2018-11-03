@@ -1,39 +1,28 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
   labels:
     run: pachbot
-  name: pachbot
-  namespace: default
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      run: pachbot
-  template:
-    metadata:
-      labels:
-        run: pachbot
-    spec:
-      hostNetwork: true
-      containers:
-        - image: pskreter/pachbot:0.1.0
-          imagePullPolicy: Always
-          command:
-            - tail
-          args:
-            - -f
-            - /dev/null
-          name: pachbot
-          ports:
-            - containerPort: 8080
-              protocol: TCP
-          resources: {}
-          volumeMounts:
-            - name: pipeline-volume
-              mountPath: /pipelines
-      volumes:
+  hostNetwork: true
+  containers:
+    - image: skreter/pachbot:0.1.2
+      imagePullPolicy: Always
+      command:
+        - tail
+      args:
+        - -f
+        - /dev/null
+      name: pachbot
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      resources: {}
+      volumeMounts:
         - name: pipeline-volume
-          configMap:
-            name: pipelines
-      restartPolicy: Always
+          mountPath: /pipelines
+  volumes:
+    - name: pipeline-volume
+      configMap:
+        name: pipelines
+  restartPolicy: Never
