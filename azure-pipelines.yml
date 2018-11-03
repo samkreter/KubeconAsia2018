@@ -7,14 +7,13 @@ pool:
   vmImage: "Ubuntu 16.04"
 
 variables:
-  imageName: $(acrId).azurecr.io/test:$(build.buildId)
+  imageName: $(dockerRegistry)/$(baseImageName):$(build.buildId)
 
 steps:
   - script: docker build -f Dockerfile -t $(imageName) .
     displayName: "Build Image"
 
   - script: |
-      docker login -u $(acrId) -p $(acrKey) $(acrId).azurecr.io
+      docker login -u $(dockerUser) -p $(dockerKey) $(dockerRegistry)
       docker push $(imageName)
-
-  - script: ./test.sh
+    displayName: "Push to ACR"
