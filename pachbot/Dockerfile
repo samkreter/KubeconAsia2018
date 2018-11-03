@@ -8,5 +8,7 @@ RUN curl -o /tmp/pachctl.tar.gz -L https://github.com/pachyderm/pachyderm/releas
 
 COPY data /
 COPY setup.sh /
+COPY update.sh /
 
 RUN chmod a+x /setup.sh
+RUN chmod a+x /update.sh
