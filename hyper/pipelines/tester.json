@@ -1,0 +1,3 @@
+{
+  "pipelineImage": "tester:#IMAGE_TAG#"
+}

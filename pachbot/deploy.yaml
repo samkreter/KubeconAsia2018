@@ -17,7 +17,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - image: pskreter/pachbot:0.0.6
+        - image: pskreter/pachbot:#IMAGE_TAG#
           imagePullPolicy: Always
           env:
             - name: GITHUB_TOKEN
@@ -31,4 +31,11 @@ spec:
             - containerPort: 8080
               protocol: TCP
           resources: {}
+          volumeMounts:
+            - name: pipeline-volume
+              mountPath: /pipelines
+      volumes:
+        - name: pipeline-volume
+      configMap:
+        name: pipelines
       restartPolicy: Always

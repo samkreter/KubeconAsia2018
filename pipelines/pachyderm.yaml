@@ -10,10 +10,14 @@ variables:
   imageName: $(dockerRegistry)/$(baseImageName):$(build.buildId)
 
 steps:
+  # - script: |
+  #     apt update && apt install -y curl
+  #     curl -o /tmp/pachctl.tar.gz -L https://github.com/pachyderm/pachyderm/releases/download/v1.7.10/pachctl_1.7.10_linux_amd64.tar.gz && tar -xvf /tmp/pachctl.tar.gz -C /tmp && sudo cp /tmp/pachctl_1.7.10_linux_amd64/pachctl /usr/local/bin
+  #   displayName: "Install Pachyderm"
+
   - script: |
-      apt update && apt install -y curl
-      curl -o /tmp/pachctl.tar.gz -L https://github.com/pachyderm/pachyderm/releases/download/v1.7.10/pachctl_1.7.10_linux_amd64.tar.gz && tar -xvf /tmp/pachctl.tar.gz -C /tmp && sudo cp /tmp/pachctl_1.7.10_linux_amd64/pachctl /usr/local/bin
-    displayName: "Install Pachyderm"
-  - script: |
-      pachctl version
-    displayName: "Test Pachctl Install"
+      sed -i 's/#$(baseImageName)#/imageName/g' ./hyper/pipelines/$(baseImageName).yaml
+    displayName: "Replace Image Tags"
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifacts: drop"
