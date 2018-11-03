@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pachbot#BUILD_NUMBER#
+  name: pachbot-#BUILD_NUMBER#
   namespace: deployment
   labels:
     run: pachbot

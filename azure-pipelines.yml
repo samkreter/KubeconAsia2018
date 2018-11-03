@@ -10,10 +10,10 @@ variables:
   imageName: $(dockerRegistry)/$(baseImageName):$(Build.BuildNumber)
 
 steps:
-  - script: docker build -f Dockerfile -t $(imageName) .
-    displayName: "Build Image"
+  # - script: docker build -f Dockerfile -t $(imageName) .
+  #   displayName: "Build Image"
 
-  - script: |
-      docker login -u $(dockerUser) -p $(dockerKey) $(dockerRegistry)
-      docker push $(imageName)
-    displayName: "Push to ACR"
+  # - script: |
+  #     docker login -u $(dockerUser) -p $(dockerKey) $(dockerRegistry)
+  #     docker push $(imageName)
+  #   displayName: "Push to ACR"
