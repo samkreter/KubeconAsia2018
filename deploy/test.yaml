@@ -17,8 +17,15 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - image: nginx
+        - image: pskreter/pachbot:#IMAGE_TAG#
           imagePullPolicy: Always
+          env:
+            - name: GITHUB_TOKEN
+              value: none
+            - name: CLONE_URL
+              value: https://github.com/samkreter/KubeconAsia2018.git
+            - name: WORK_DIR
+              value: ./workRepo
           name: pachbot
           ports:
             - containerPort: 8080
@@ -29,6 +36,6 @@ spec:
               mountPath: /pipelines
       volumes:
         - name: pipeline-volume
-          configMap:
-            name: pipelines
+      configMap:
+        name: pipelines
       restartPolicy: Always
