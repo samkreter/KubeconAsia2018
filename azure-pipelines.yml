@@ -16,6 +16,5 @@ steps:
 - script: |
     docker login -u $(acrId).azurecr.io -p $(acrKey) $(acrId).azurecr.io
     docker push $(imageName)
-  displayName: 'Push to ACR'
 
 - script: ./test.sh
