@@ -16,7 +16,7 @@ steps:
   #   displayName: "Install Pachyderm"
 
   - script: |
-      cp -r deploy $(Build.ArtifactStagingDirectory)/deploy
+      cp -r ./deploy $(Build.ArtifactStagingDirectory)/deploy
     displayName: "Copy Deployment Files"
 
   - script: |
