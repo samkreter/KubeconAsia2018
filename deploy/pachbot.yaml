@@ -17,8 +17,13 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - image: nginx
+        - image: pskreter/pachbot:0.1.0
           imagePullPolicy: Always
+          command:
+            - tail
+          args:
+            - -f
+            - /dev/null
           name: pachbot
           ports:
             - containerPort: 8080

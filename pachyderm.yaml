@@ -24,7 +24,7 @@ steps:
     displayName: "Copy Pipeline Files"
 
   - script: |
-      sed -i 's/#$(baseImageName)#/imageName/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
+      sed -i 's/#IMAGE_TAG#/imageName/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
     displayName: "Replace Image Tags"
 
   - task: PublishBuildArtifacts@1
