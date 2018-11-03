@@ -1,0 +1,1 @@
+echo "Testing I can run scripts"

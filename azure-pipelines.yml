@@ -10,10 +10,12 @@ variables:
   imageName: 'test:$(build.buildId)'
 
 steps:
-- script: docker build -f pachbot/Dockerfile -t $(imageName) pachbot/.
-  displayName: 'docker build'
+- script: docker build -f Dockerfile -t $(imageName) .
+  displayName: 'Build Image'
   
 - script: |
     docker login -u $(acrId).azurecr.io -p $(acrKey) $(acrId).azurecr.io
     docker push $(acrId).azurecr.io/$(imageName)
   displayName: 'Push to ACR'
+
+- script: ./test.sh
