@@ -28,7 +28,7 @@ steps:
     displayName: "Copy Pipeline Files"
 
   - script: |
-      sed -i 's/#IMAGE_TAG#/$(escapeImageName)/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
+      sed -i 's/#IMAGE_NAME#/$(escapeImageName)/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
     displayName: "Update Image Tags"
 
   - script: |
