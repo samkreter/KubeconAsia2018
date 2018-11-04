@@ -10,6 +10,8 @@ variables:
   imageName: $(dockerUser).azurecr.io/iris-train:$(Build.BuildNumber)
   escapeImageName: $(dockerUser).azurecr.io\/iris-train:$(Build.BuildNumber)
 
+pr: none
+
 steps:
   - script: docker build -f irisTrain/Dockerfile -t $(imageName) irisTrain/.
     displayName: "Build Image"
