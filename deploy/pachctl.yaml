@@ -12,9 +12,16 @@ spec:
         - /dev/null
       command:
         - tail
-      image: pskreter/pachbot:0.2.20
+      image: pskreter/pachbot:0.2.23
       imagePullPolicy: Always
       name: pachctl
       resources: {}
+      volumeMounts:
+        - name: pipeline-volume
+          mountPath: /pipelines
   hostNetwork: true
+  volumes:
+    - name: pipeline-volume
+      configMap:
+        name: pipelines
   restartPolicy: Always

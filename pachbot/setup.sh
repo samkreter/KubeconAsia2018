@@ -11,4 +11,7 @@ pachctl put-file parameters master -f data/parameters/gamma_parameters.txt --spl
 pachctl create-pipeline -f /pipelines/split.json 
 pachctl create-pipeline -f /pipelines/model.json
 pachctl create-pipeline -f /pipelines/test.json 
+
+sleep 40
+
 pachctl create-pipeline -f /pipelines/select.json
