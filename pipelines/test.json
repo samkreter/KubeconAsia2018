@@ -3,8 +3,8 @@
     "name": "test"
   },
   "transform": {
-    "image": "pachyderm/iris-evaluate",
-    "cmd": [ "/bin/ash" ],
+    "image": "pskreter/iristest:0.0.1",
+    "cmd": ["/bin/ash"],
     "stdin": [
       "for f in /pfs/model/*",
       "do",
@@ -24,14 +24,14 @@
     "cross": [
       {
         "atom": {
-	  "repo": "split",
-	  "glob": "/test.csv"
-	}
+          "repo": "split",
+          "glob": "/test.csv"
+        }
       },
       {
-	"atom": {
-	  "repo": "model",
-	  "glob": "/*"
+        "atom": {
+          "repo": "model",
+          "glob": "/*"
         }
       }
     ]
