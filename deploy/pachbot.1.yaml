@@ -12,10 +12,11 @@ spec:
       name: pachbot
       imagePullPolicy: Always
       command:
-        - /bin/bash
+        - pachctl
       args:
-        - -c
-        - /update.sh
+        - update-pipeline
+        - -f
+        - /pipelines/model.json
       resources: {}
       volumeMounts:
         - name: pipeline-volume
