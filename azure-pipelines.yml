@@ -7,13 +7,33 @@ pool:
   vmImage: "Ubuntu 16.04"
 
 variables:
-  imageName: $(dockerRegistry)/$(baseImageName):$(Build.BuildNumber)
+  imageName: $(dockerUser).azurecr.io/iris-train:$(Build.BuildNumber)
+  escapeImageName: $(dockerUser).azurecr.io\/iris-train:$(Build.BuildNumber)
 
 steps:
-  # - script: docker build -f Dockerfile -t $(imageName) .
-  #   displayName: "Build Image"
+  - displayName: "Build Image"
+    script: docker build -f irisTrain/Dockerfile -t $(imageName) irisTrain/.
 
-  # - script: |
-  #     docker login -u $(dockerUser) -p $(dockerKey) $(dockerRegistry)
-  #     docker push $(imageName)
-  #   displayName: "Push to ACR"
+  - displayName: "Push to ACR"
+    script: |
+      docker login -u $(dockerUser) -p $(dockerKey) $(dockerUser).azurecr.io
+      docker push $(imageName)
+
+  - displayName: "Copy Deployment files"
+    script: |
+      cp -r ./deploy $(Build.ArtifactStagingDirectory)/deploy
+
+  - displayName: "Copy Pipeline Files"
+    script: |
+      cp -r pipelines $(Build.ArtifactStagingDirectory)/pipelines
+
+  - displayName: "Update Image Tags"
+    script: |
+      sed -i 's/#IMAGE_TAG#/$(escapeImageName)/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
+
+  - displayName: "Update Deployer Build Number"
+    script: |
+      sed -i 's/#BUILD_NUMBER#/$(Build.BuildNumber)/g' $(Build.ArtifactStagingDirectory)/deploy/*.yaml
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifacts: drop"

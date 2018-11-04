@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pachctl
+  namespace: tools
+  labels:
+    run: pachctl
+spec:
+  containers:
+    - args:
+        - -f
+        - /dev/null
+      command:
+        - tail
+      image: pskreter/pachbot:0.2.20
+      imagePullPolicy: Always
+      name: pachctl
+      resources: {}
+  hostNetwork: true
+  restartPolicy: Always
