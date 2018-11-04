@@ -16,7 +16,8 @@
       "python /code/pytrain.py /tmp/ /pfs/out/ $cparam $gammaparam",
       "done",
       "done"
-    ]
+    ],
+    "image_pull_secrets": ["acrregistrykey"]
   },
   "parallelism_spec": {
     "constant": "1"
