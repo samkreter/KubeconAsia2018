@@ -12,7 +12,7 @@ spec:
         - /dev/null
       command:
         - tail
-      image: pskreter/pachbot:0.2.23
+      image: pskreter/pachbot:0.2.24
       imagePullPolicy: Always
       name: pachctl
       resources: {}

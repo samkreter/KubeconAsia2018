@@ -4,7 +4,9 @@
   },
   "transform": {
     "image": "pskreter/iristest:0.0.1",
-    "cmd": ["/bin/ash"],
+    "cmd": [
+      "/bin/ash"
+    ],
     "stdin": [
       "for f in /pfs/model/*",
       "do",

@@ -4,7 +4,9 @@
   },
   "transform": {
     "image": "dianoga/docker-ubuntu-jq-curl-bc",
-    "cmd": [ "/bin/bash" ],
+    "cmd": [
+      "/bin/bash"
+    ],
     "stdin": [
       "bestmetric=0.0",
       "for f in /pfs/test/*",
@@ -36,14 +38,14 @@
     "cross": [
       {
         "atom": {
-	  "repo": "test",
-	  "glob": "/"
-	}
+          "repo": "test",
+          "glob": "/"
+        }
       },
       {
-	"atom": {
-	  "repo": "model",
-	  "glob": "/"
+        "atom": {
+          "repo": "model",
+          "glob": "/"
         }
       }
     ]

@@ -8,7 +8,7 @@ metadata:
 spec:
   hostNetwork: true
   containers:
-    - image: pskreter/pachbot:0.2.23
+    - image: pskreter/pachbot:0.2.24
       name: pachbot
       imagePullPolicy: Always
       command:
