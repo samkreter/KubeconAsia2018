@@ -11,29 +11,29 @@ variables:
   escapeImageName: $(dockerUser).azurecr.io\/iris-train:$(Build.BuildNumber)
 
 steps:
-  - displayName: "Build Image"
-    script: docker build -f irisTrain/Dockerfile -t $(imageName) irisTrain/.
+  - script: docker build -f irisTrain/Dockerfile -t $(imageName) irisTrain/.
+    displayName: "Build Image"
 
-  - displayName: "Push to ACR"
-    script: |
+  - script: |
       docker login -u $(dockerUser) -p $(dockerKey) $(dockerUser).azurecr.io
       docker push $(imageName)
+    displayName: "Push to ACR"
 
-  - displayName: "Copy Deployment files"
-    script: |
+  - script: |
       cp -r ./deploy $(Build.ArtifactStagingDirectory)/deploy
+    displayName: "Copy Deployment files"
 
-  - displayName: "Copy Pipeline Files"
-    script: |
+  - script: |
       cp -r pipelines $(Build.ArtifactStagingDirectory)/pipelines
+    displayName: "Copy Pipeline Files"
 
-  - displayName: "Update Image Tags"
-    script: |
+  - script: |
       sed -i 's/#IMAGE_TAG#/$(escapeImageName)/g' $(Build.ArtifactStagingDirectory)/pipelines/*.json
+    displayName: "Update Image Tags"
 
-  - displayName: "Update Deployer Build Number"
-    script: |
+  - script: |
       sed -i 's/#BUILD_NUMBER#/$(Build.BuildNumber)/g' $(Build.ArtifactStagingDirectory)/deploy/*.yaml
+    displayName: "Update Deployer Build Number"
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifacts: drop"
