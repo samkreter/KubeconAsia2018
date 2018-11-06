@@ -14,11 +14,10 @@ This example will walkthrough setting up a continous integration pipeline using 
 
 The main data science pipeline comes from the [Pachyderm Hyperparameter Tuning Example](https://github.com/pachyderm/pachyderm/tree/master/doc/examples/ml/hyperparameter).
 
-A litttle about the example from their repository:
+A good description from their repository:
+"This example demonstrates how you can evaluate a model or function in a distributed manner on multiple sets of parameters. In this particular case, we will evaluate many machine learning models, each configured uses different sets of parameters (aka hyperparameters), and we will output only the best performing model or models.
 
-    "This example demonstrates how you can evaluate a model or function in a distributed manner on multiple sets of parameters. In this particular case, we will evaluate many machine learning models, each configured uses different sets of parameters (aka hyperparameters), and we will output only the best performing model or models.
-
-    The models trained and evaluated in the example will attempt to predict the species of iris flowers using the iris data set, which is often used to demonstrate ML methods. The different sets of parameters used in the example are the _C_ and _Gamma_ parameters of an SVM machine learning model. If you aren't familiar with that model or those parameters, don't worry about them too much. The point here is that _C_ and _Gamma_ are parameters of this model, and we want to search over many combinations of _C_ and _Gamma_ to determine which combination best predicts iris flower species."
+The models trained and evaluated in the example will attempt to predict the species of iris flowers using the iris data set, which is often used to demonstrate ML methods. The different sets of parameters used in the example are the _C_ and _Gamma_ parameters of an SVM machine learning model. If you aren't familiar with that model or those parameters, don't worry about them too much. The point here is that _C_ and _Gamma_ are parameters of this model, and we want to search over many combinations of _C_ and _Gamma_ to determine which combination best predicts iris flower species.
 
 ## Prerequisites
 
@@ -54,41 +53,15 @@ _Note:_ You may need to run `chmod a+x setup.sh` to make it executable.
 
 The script will create:
 
-1. Create and populate the raw_data and parameters data repositories
+1. Create the raw_data and parameters data repositories
 
-2. 
+2. Add the base data to the repositories. We will be adding the iris dataset with a little noise as a csv to the repository. For the parameters, we use Pachyderms built in splitting capability to convert each line of our parameter file into a seperate file. This will make it easier to distribute them between multiple instances of the running contianer.
 
-The two input data repositories for this example are `raw-data` containing the raw iris data set and `parameters` containing all of our _C_ and _Gamma_ parameters. First let's create these repositories:
+3. Create the pipelines from the pipeline files.
 
-```sh
-$ pachctl create-repo raw_data
-$ pachctl create-repo parameters
-$ pachctl list-repo
-NAME                CREATED             SIZE
-parameters          47 seconds ago      0B
-raw-data            52 seconds ago      0B
-```
-
-Then, we can put our iris data set into `raw-data`. We are going to use a version of the iris data set that includes a little bit of noise to make the classification problem more difficult. This data set is included under [data/noisy_iris.csv](data/noisy_iris.csv). To commit this data set into Pachyderm:
+Run the following command to view the parameters added to the repository.
 
 ```sh
-$ cd data
-$ pachctl put-file raw_data master iris.csv -c -f noisy_iris.csv
-$ pachctl list-file raw_data master
-NAME                TYPE                SIZE
-iris.csv            file                10.29KiB
-```
-
-The _C_ and _Gamma_ parameters that we will be searching over are included in [data/parameters](data/parameters) under two respective files. In order to process each combination of these parameters in parallel, we are going to use Pachyderm's built in splitting capability to split each parameter value into a separate file:
-
-```sh
-$ cd parameters
-$ pachctl put-file parameters master -c -f c_parameters.txt --split line --target-file-datums 1
-$ pachctl put-file parameters master -c -f gamma_parameters.txt --split line --target-file-datums 1
-$ pachctl list-file parameters master
-NAME                   TYPE                SIZE
-c_parameters.txt       dir                 81B
-gamma_parameters.txt   dir                 42B
 $ pachctl list-file parameters master c_parameters.txt
 NAME                                TYPE                SIZE
 c_parameters.txt/0000000000000000   file                6B
@@ -102,43 +75,16 @@ c_parameters.txt/0000000000000007   file                8B
 c_parameters.txt/0000000000000008   file                9B
 c_parameters.txt/0000000000000009   file                9B
 c_parameters.txt/000000000000000a   file                10B
-$ pachctl list-file parameters master gamma_parameters.txt
-NAME                                    TYPE                SIZE
-gamma_parameters.txt/0000000000000000   file                6B
-gamma_parameters.txt/0000000000000001   file                6B
-gamma_parameters.txt/0000000000000002   file                6B
-gamma_parameters.txt/0000000000000003   file                6B
-gamma_parameters.txt/0000000000000004   file                6B
-gamma_parameters.txt/0000000000000005   file                6B
-gamma_parameters.txt/0000000000000006   file                6B
 ```
 
-As you can see, each of the parameter files has been split into a file per line, and thus a file per parameter. This can be seen by looking at the file contents:
+You can see each individule file with:
 
-```sh
-$ pachctl get-file parameters master c_parameters.txt/0000000000000000
-0.031
-$ pachctl get-file parameters master c_parameters.txt/0000000000000001
-0.125
-$ pachctl get-file parameters master c_parameters.txt/0000000000000002
-0.500
-```
+    $ pachctl get-file parameters master c_parameters.txt/0000000000000000
+    0.031
 
 For more information on splitting data files, see our [splitting data for distributed processing](http://pachyderm.readthedocs.io/en/latest/cookbook/splitting.html) cookbook recipe.
 
-## Creating the pipelines
-
-To create the four pipelines mentioned and illustrated above:
-
-```sh
-$ cd ../../
-$ pachctl create-pipeline -f split.json
-$ pachctl create-pipeline -f model.json
-$ pachctl create-pipeline -f test.json
-$ pachctl create-pipeline -f select.json
-```
-
-Once the pipelines are up an running you should be able to see their corresponding workers in kubernetes:
+Next we can see the pipeline pods coming up in Kubeneretes
 
 ```sh
 $ kubectl get pods
