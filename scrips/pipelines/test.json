@@ -18,7 +18,7 @@
     ]
   },
   "parallelism_spec": {
-    "coefficient": 1
+    "coefficient": 2
   },
   "input": {
     "cross": [
