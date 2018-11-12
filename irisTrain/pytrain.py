@@ -13,6 +13,7 @@ parser.add_argument('gammaparam', type=float, help='Parameter Gamma for SVM')
 args = parser.parse_args()
 
 print("OUTDIR: ", args.outdir)
+print("INDIR: ", args.indir)
 
 # training set column names
 cols = [
