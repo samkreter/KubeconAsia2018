@@ -14,17 +14,14 @@ This example will walkthrough setting up a continous integration pipeline using 
 
 The main data science pipeline comes from the [Pachyderm Hyperparameter Tuning Example](https://github.com/pachyderm/pachyderm/tree/master/doc/examples/ml/hyperparameter).
 
-A good description from their repository:
-"This example demonstrates how you can evaluate a model or function in a distributed manner on multiple sets of parameters. In this particular case, we will evaluate many machine learning models, each configured uses different sets of parameters (aka hyperparameters), and we will output only the best performing model or models.
-
-The models trained and evaluated in the example will attempt to predict the species of iris flowers using the iris data set, which is often used to demonstrate ML methods. The different sets of parameters used in the example are the _C_ and _Gamma_ parameters of an SVM machine learning model. If you aren't familiar with that model or those parameters, don't worry about them too much. The point here is that _C_ and _Gamma_ are parameters of this model, and we want to search over many combinations of _C_ and _Gamma_ to determine which combination best predicts iris flower species.
+The example pipeline we will be using will show evalutating different parameters and selecting the best models. The pipeline takes in raw data, in this case the iris dataset. It will split that data into training and testing. Then generated models based on different parameters. The models are then evaluated and the top models are selected based on an error threshhold.
 
 ## Prerequisites
 
 - A Pachyderm cluster running - see [this guide](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough) on creating a Azure Managed Kuberentes Cluster and [install pachyderm](http://docs.pachyderm.io/en/latest/deployment/azure.html).
 - The `pachctl` CLI tool installed and connected to your Pachyderm cluster - see the[deploy docs](http://pachyderm.readthedocs.io/en/latest/deployment/deploy_intro.html) for instructions.
 
-## The pipelines
+## The Pipelines
 
 The example uses 4 pipeline stages to accomplish this distributed hyperparameter tuning/search. First we will split our iris data set into a training and test data set. The training set will be used to train or fit our model with the various sets of parameters and the test set will be used later to evaluate each trained model.
 
@@ -44,7 +41,7 @@ Finally, in a `select` stage we will determine which of the evaluate metrics in 
 
 ## Create the Pipeline
 
-Run the following command to set up the entire pipeline
+Make sure pachctl is connected to your cluster and run the following command to set up the entire pipeline
 
     cd scrips
     ./setup.sh
@@ -158,3 +155,5 @@ etc...
 _Note_ - Here, 36 of the 77 models were selected as ideal. Due to the fact that we are randomly shuffling our training/test data, your results may vary slightly.
 
 _Note_ - The pipeline we've built here is very easy to generalize for any sort of parameter space exploration. As long as you break up your parameters into individual files (as shown above), you can test the whole parameter space in a massively distributed way and simply pick out the best results.
+
+## Setting Up Continuous Integratino with Azure DevOps
