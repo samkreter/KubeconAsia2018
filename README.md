@@ -156,4 +156,4 @@ _Note_ - Here, 36 of the 77 models were selected as ideal. Due to the fact that 
 
 _Note_ - The pipeline we've built here is very easy to generalize for any sort of parameter space exploration. As long as you break up your parameters into individual files (as shown above), you can test the whole parameter space in a massively distributed way and simply pick out the best results.
 
-## Setting Up Continuous Integratino with Azure DevOps
+## Setting Up Continuous Integration with Azure DevOps
