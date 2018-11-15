@@ -12,8 +12,8 @@ parser.add_argument('cparam', type=float, help='Parameter C for SVM')
 parser.add_argument('gammaparam', type=float, help='Parameter Gamma for SVM')
 args = parser.parse_args()
 
-print("OUTDIR2: ", args.outdir)
-print("INDIR2: ", args.indir)
+print("OUTDIR: ", args.outdir)
+print("INDIR: ", args.indir)
 
 # training set column names
 cols = [
